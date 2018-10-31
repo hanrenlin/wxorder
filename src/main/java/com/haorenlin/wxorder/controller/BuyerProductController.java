@@ -8,6 +8,7 @@ import com.haorenlin.wxorder.utils.ResultVOUtil;
 import com.haorenlin.wxorder.vo.ProductInfoVO;
 import com.haorenlin.wxorder.vo.ProductVO;
 import com.haorenlin.wxorder.vo.ResultVO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/buyer/product")
+@Slf4j
 public class BuyerProductController {
     @Autowired
     private ProductInfoService productInfoService;
@@ -34,6 +36,7 @@ public class BuyerProductController {
 
     @GetMapping("/list")
     public ResultVO list(){
+        log.info("product list come in");
         //1. 查询所有的上架商品
         List<ProductInfo> productInfoList = productInfoService.findUpAll();
 

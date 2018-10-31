@@ -104,6 +104,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDTO cancel(OrderDTO orderDTO) {
+        if (orderDTO == null) {
+            throw new SellException(ResultEnum.ORDER_NOT_EXIST);
+        }
         /** 判断订单状态*/
         if (OrderStatusEnum.NEW.getCode() != orderDTO.getOrderStatus()) {
             log.error("【取消订单】订单状态不正确，orderId={},orderStatus={}",orderDTO.getOrderId(),orderDTO.getOrderStatus());
@@ -133,6 +136,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDTO finish(OrderDTO orderDTO) {
+        if (orderDTO == null) {
+            throw new SellException(ResultEnum.ORDER_NOT_EXIST);
+        }
         /** 判断订单状态*/
         if (OrderStatusEnum.NEW.getCode() != orderDTO.getOrderStatus()) {
             log.error("【完结订单】订单状态有误，orderId={},orderStatus={}",orderDTO.getOrderId(),orderDTO.getOrderStatus());

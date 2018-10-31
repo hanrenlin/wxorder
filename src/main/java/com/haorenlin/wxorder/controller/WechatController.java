@@ -36,50 +36,51 @@ public class WechatController {
     @Autowired
     private UrlConfig urlConfig;
 
-    @GetMapping("authorize")
+    @GetMapping("/authorize")
     public String authorize(@RequestParam("returnUrl") String returnUrl) {
         //1. 配置
         //2. 调用方法
         String url = urlConfig.getWechatMpAuthorize() + "/sell/wechat/userInfo";
         String redirectUrl = wxMpService.oauth2buildAuthorizationUrl(url, WxConsts.OAuth2Scope.SNSAPI_USERINFO, URLEncoder.encode(returnUrl));
-        System.out.println("authorize redirectUrl:"+redirectUrl);
+        log.info("authorize redirectUrl:{}", redirectUrl);
         return "redirect:" + redirectUrl;
     }
 
-    @GetMapping("userInfo")
+    @GetMapping("/userInfo")
     public String userInfo(@RequestParam("code") String code,
-                         @RequestParam("state") String returnUrl) {
+                           @RequestParam("state") String returnUrl) {
         WxMpOAuth2AccessToken wxMpOAuth2AccessToken = new WxMpOAuth2AccessToken();
         try {
-            System.out.println("code:"+code);
+            log.info("code:" + code);
             wxMpOAuth2AccessToken = wxMpService.oauth2getAccessToken(code);
         } catch (Exception e) {
             log.error("【微信网页授权】{}", e);
             throw new SellException(ResultEnum.WECHAT_MP_ERROR.getCode(), e.getMessage());
         }
         String openId = wxMpOAuth2AccessToken.getOpenId();
-        System.out.println("openId:"+openId);
-        System.out.println("returnUrl:"+returnUrl);
+        log.info("openId:{}", openId);
+        log.info("returnUrl:{}", returnUrl);
         return "redirect:" + returnUrl + "?openid=" + openId;
     }
+
 
     @GetMapping("/auth")
     public String auth(@RequestParam("code") String code) {
         log.info("weixin auth come in");
-        log.info("code={}",code);
-        String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx2cdc9155eaaa22e7&secret=b3ad29d0bd6d30f7cb40a52cfd0203d6&code="+code+"&grant_type=authorization_code";
+        log.info("code={}", code);
+        String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx2cdc9155eaaa22e7&secret=b3ad29d0bd6d30f7cb40a52cfd0203d6&code=" + code + "&grant_type=authorization_code";
 
         RestTemplate restTemplate = new RestTemplate();
         String response = restTemplate.getForObject(url, String.class);
-        System.out.println("response:"+response);
-        return "success! code->"+code+"\nresponse->"+response;
+        log.info("response:" + response);
+        return "success! code->" + code + "\nresponse->" + response;
     }
 
     @GetMapping("/authCode")
-    public void authCode(HttpServletRequest request){
+    public void authCode(HttpServletRequest request) {
         log.info("weixin authCode come in");
-        System.out.println(request.getRequestURL().toString());
-        System.out.println("code:"+request.getParameter("code"));
+        log.info(request.getRequestURL().toString());
+        log.info("code:" + request.getParameter("code"));
 
     }
 
