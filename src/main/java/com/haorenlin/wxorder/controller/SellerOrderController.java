@@ -38,7 +38,7 @@ public class SellerOrderController {
      * @return
      */
     @GetMapping("/list")
-    private ModelAndView list(@RequestParam(value = "page",defaultValue = "1") Integer pageNumber,
+    public ModelAndView list(@RequestParam(value = "page",defaultValue = "1") Integer pageNumber,
                               @RequestParam(value = "size",defaultValue = "10") Integer pageSize,
                               Map<String,Object> map) {
         Page<OrderDTO> orderDTOPage = orderService.findList(new PageRequest(pageNumber.intValue() - 1, pageSize.intValue()));
@@ -54,7 +54,8 @@ public class SellerOrderController {
      * @param map
      * @return
      */
-    private ModelAndView detail (@RequestParam("orderId") String orderId, Map<String,Object> map) {
+    @GetMapping("/detail")
+    public ModelAndView detail (@RequestParam("orderId") String orderId, Map<String,Object> map) {
         try {
              map.put("orderDTO",orderService.findOneByOrderId(orderId));
         } catch (SellException e) {
@@ -71,7 +72,8 @@ public class SellerOrderController {
      * @param map
      * @return
      */
-    private ModelAndView cancel (@RequestParam("orderId") String orderId, Map<String,Object> map) {
+    @GetMapping("cancel")
+    public ModelAndView cancel (@RequestParam("orderId") String orderId, Map<String,Object> map) {
         String modelKey = null;
         try {
             orderService.cancel(orderService.findOneByOrderId(orderId));
@@ -82,7 +84,7 @@ public class SellerOrderController {
             map.put("msg",e.getMessage());
             modelKey = "common/error";
         }
-        map.put("url","sell/seller/order/cancel");
+        map.put("url","sell/seller/order/list");
         return new ModelAndView(modelKey, map);
     }
 
@@ -92,7 +94,8 @@ public class SellerOrderController {
      * @param map
      * @return
      */
-    private ModelAndView finish (@RequestParam("orderId") String orderId, Map<String,Object> map) {
+    @GetMapping("finish")
+    public ModelAndView finish (@RequestParam("orderId") String orderId, Map<String,Object> map) {
         String modelKey = null;
         try {
             orderService.finish(orderService.findOneByOrderId(orderId));
@@ -103,7 +106,7 @@ public class SellerOrderController {
             map.put("msg",e.getMessage());
             modelKey = "common/error";
         }
-        map.put("url","sell/seller/order/finish");
+        map.put("url","sell/seller/order/list");
         return new ModelAndView(modelKey, map);
     }
 

@@ -1,7 +1,12 @@
 package com.haorenlin.wxorder.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import com.haorenlin.wxorder.dataobject.OrderDetail;
+import com.haorenlin.wxorder.enums.OrderStatusEnum;
+import com.haorenlin.wxorder.enums.PayStatusEnum;
+import com.haorenlin.wxorder.utils.EnumUtil;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -47,10 +52,25 @@ public class OrderDTO {
     private Integer payStatus;
 
     /** 创建时间. */
+    @JsonSerialize
     private Date createTime;
 
     /** 更新时间. */
+    @JsonSerialize
     private Date updateTime;
 
     List<OrderDetail> orderDetailList;
+
+    @JsonIgnore
+    public OrderStatusEnum getOrderStatusEnum() {
+        return EnumUtil.getMessageByCode(orderStatus, OrderStatusEnum.class);
+    }
+
+    @JsonIgnore
+    public PayStatusEnum getPayStatusEnum() {
+        return EnumUtil.getMessageByCode(payStatus, PayStatusEnum.class);
+    }
+
+
+
 }

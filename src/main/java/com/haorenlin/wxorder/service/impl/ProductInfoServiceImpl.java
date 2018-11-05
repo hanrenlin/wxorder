@@ -9,6 +9,7 @@ import com.haorenlin.wxorder.repository.ProductInfoRepository;
 import com.haorenlin.wxorder.service.ProductInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ import java.util.List;
  */
 @Service
 public class ProductInfoServiceImpl implements ProductInfoService {
+
     @Autowired
     private ProductInfoRepository repository;
 
@@ -34,8 +36,8 @@ public class ProductInfoServiceImpl implements ProductInfoService {
     }
 
     @Override
-    public List<ProductInfo> findAll(Pageable pageable) {
-        return repository.findAll();
+    public Page<ProductInfo> findAll(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     @Override
@@ -49,7 +51,7 @@ public class ProductInfoServiceImpl implements ProductInfoService {
             return;
         }
         cartDTOList.stream().forEach(x -> {
-            ProductInfo productInfo = repository.findOne(Example.of(ProductInfo.builder().productId(x.getProductId()).build())).get();
+            ProductInfo productInfo = findOneById(x.getProductId());
             if (productInfo == null) {
                 throw  new SellException(ResultEnum.PRODUCT_NOT_EXIST);
             }
@@ -66,7 +68,7 @@ public class ProductInfoServiceImpl implements ProductInfoService {
             return;
         }
         cartDTOList.stream().forEach(x -> {
-            ProductInfo productInfo = repository.findOne(Example.of(ProductInfo.builder().productId(x.getProductId()).build())).get();
+            ProductInfo productInfo = findOneById(x.getProductId());
             if (productInfo == null) {
                 throw  new SellException(ResultEnum.PRODUCT_NOT_EXIST);
             }
@@ -76,5 +78,36 @@ public class ProductInfoServiceImpl implements ProductInfoService {
             }
             repository.save(productInfo);
         });
+    }
+
+
+    @Override
+    public ProductInfo onSale(String productId) {
+        ProductInfo productInfo =findOneById(productId);
+        if (productInfo == null) {
+            throw new SellException(ResultEnum.PRODUCT_NOT_EXIST);
+        }
+        if (productInfo.getProductStatusEnum() == ProductStatusEnum.UP) {
+            throw new SellException(ResultEnum.PRODUCT_STATUS_ERROR);
+        }
+
+        //更新
+        productInfo.setProductStatus(ProductStatusEnum.UP.getCode());
+        return repository.save(productInfo);
+    }
+
+    @Override
+    public ProductInfo offSale(String productId) {
+        ProductInfo productInfo = findOneById(productId);
+        if (productInfo == null) {
+            throw new SellException(ResultEnum.PRODUCT_NOT_EXIST);
+        }
+        if (productInfo.getProductStatusEnum() == ProductStatusEnum.DOWN) {
+            throw new SellException(ResultEnum.PRODUCT_STATUS_ERROR);
+        }
+
+        //更新
+        productInfo.setProductStatus(ProductStatusEnum.DOWN.getCode());
+        return repository.save(productInfo);
     }
 }

@@ -1,9 +1,6 @@
 package com.haorenlin.wxorder.dataobject;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Entity;
@@ -21,6 +18,8 @@ import java.util.Date;
 @DynamicUpdate
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

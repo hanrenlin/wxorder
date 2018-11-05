@@ -8,9 +8,7 @@ import com.haorenlin.wxorder.service.PayService;
 import com.lly835.bestpay.model.PayResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Map;
@@ -49,8 +47,9 @@ public class PayController {
         return new ModelAndView("pay/create",map);
     }
 
-    public ModelAndView asyncNotify(String nofifyData) {
-        PayResponse payResponse = payService.asyncNotify(nofifyData);
+    @GetMapping("notify")
+    public ModelAndView asyncNotify(@RequestBody String notifyData) {
+        PayResponse payResponse = payService.asyncNotify(notifyData);
         return new ModelAndView("pay/success");
     }
 }

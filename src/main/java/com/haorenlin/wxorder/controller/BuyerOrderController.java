@@ -1,8 +1,7 @@
 package com.haorenlin.wxorder.controller;
 
-import com.haorenlin.wxorder.from.OrderFrom;
+import com.haorenlin.wxorder.from.OrderForm;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -17,7 +16,7 @@ import javax.validation.Valid;
 public class BuyerOrderController {
     /** 创建订单*/
     //@Validated是@Valid的一次封装 有分组功能
-    public void create(@Valid OrderFrom orderFrom) {
+    public void create(@Valid OrderForm orderFrom) {
 
     }
     /** 订单列表*/

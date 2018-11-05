@@ -4,6 +4,7 @@ import com.haorenlin.wxorder.dataobject.ProductInfo;
 import com.haorenlin.wxorder.dto.CartDTO;
 import com.haorenlin.wxorder.repository.ProductInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -15,12 +16,16 @@ import java.util.List;
  * 商品信息
  */
 public interface ProductInfoService {
+
     /**根据ID查询*/
     ProductInfo findOneById(String productId);
+
     /**查询所有上架商品*/
     List<ProductInfo> findUpAll();
+
     /**查询所有*/
-    List<ProductInfo> findAll(Pageable pageable);
+    Page<ProductInfo> findAll(Pageable pageable);
+
     /**保存*/
     ProductInfo save(ProductInfo productInfo);
 
@@ -29,4 +34,10 @@ public interface ProductInfoService {
 
     /**减库存*/
     void decreaseStock(List<CartDTO> cartDTOList);
+
+    /** 上架*/
+    ProductInfo onSale(String productId);
+
+    /** 下架*/
+    ProductInfo offSale(String productId);
 }

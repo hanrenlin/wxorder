@@ -1,5 +1,10 @@
 package com.haorenlin.wxorder.dataobject;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.haorenlin.wxorder.enums.ProductStatusEnum;
+import com.haorenlin.wxorder.utils.EnumUtil;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,6 +27,8 @@ import java.util.Date;
 @DynamicUpdate
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductInfo {
     @Id
     private String productId;//
@@ -32,6 +39,13 @@ public class ProductInfo {
     private String productIcon;//小图
     private Integer productStatus;//商品状态,0正常1下架
     private Integer categoryType;//类目编号
+    @JsonSerialize
     private Date createTime;//创建时间',
+    @JsonSerialize
     private Date updateTime;//
+
+    @JsonIgnore
+    public ProductStatusEnum getProductStatusEnum(){
+        return EnumUtil.getMessageByCode(productStatus, ProductStatusEnum.class);
+    }
 }

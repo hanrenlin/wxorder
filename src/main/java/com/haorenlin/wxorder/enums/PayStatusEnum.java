@@ -1,9 +1,10 @@
 package com.haorenlin.wxorder.enums;
 
 import lombok.Getter;
+import org.aspectj.apache.bcel.classfile.Code;
 
 @Getter
-public enum PayStatusEnum {
+public enum PayStatusEnum implements CodeEnum {
     WAIT(0, "等待支付"),
     SUCCESS(1, "支付成功"),
     ;

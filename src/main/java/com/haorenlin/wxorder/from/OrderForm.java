@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank;
  * @Description (买家 订单创建 入参)
  **/
 @Data
-public class OrderFrom {
+public class OrderForm {
 
     /** 姓名*/
     @NotBlank(message = "姓名不能为空")

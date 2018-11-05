@@ -68,7 +68,7 @@ public class PayServiceImpl implements PayService {
             log.info("【微信支付】异步通知，订单不存在");
             throw new SellException(ResultEnum.ORDER_NOT_EXIST);
         }
-        if (orderDTO.getOrderAmount().compareTo(new BigDecimal(payResponse.getOrderAmount())) != 0) {
+        if (orderDTO.getOrderAmount().setScale(4).compareTo(new BigDecimal(payResponse.getOrderAmount()).setScale(4)) != 0) {
             log.info("【微信支付】异步通知，订单金额不一致，orderId={},系统金额={}，异步通知金额={}"
                     ,payResponse.getOrderId(), orderDTO.getOrderAmount(), payResponse.getOrderAmount());
             throw new SellException(ResultEnum.WXPAY_NOTIFY_MONEY_VERIFY_ERROR);

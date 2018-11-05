@@ -34,8 +34,8 @@ public class OrderServiceImplTest {
     @Test
     public void create() {
         OrderDTO orderDTO = OrderDTO.builder()
-                .buyerName("闫二娃")
-                .buyerAddress("合川大厦201")
+                .buyerName("闫二娃test")
+                .buyerAddress("世纪大道1229号")
                 .buyerPhone("17700000067")
                 .buyerOpenid(BUYER_OPENID).build();
         //购物车
