@@ -10,14 +10,14 @@ spring:
   jackson:
     default-property-inclusion: non_null
   redis:
-    host: 192.168.30.113
+    host: 192.168.10.91
     port: 6379
   freemarker:
     cache: false
 server:
   servlet:
     context-path: /sell
-  port: 8080
+  port: 8081
 #logging:
 #  pattern:
 #    console: "%d - %msg%n"
@@ -29,8 +29,8 @@ server:
 wechat:
   mpAppId: wx2cdc9155eaaa22e7
   mpAppSecret: b3ad29d0bd6d30f7cb40a52cfd0203d6
-  openAppId: wx6ad144e54af67d87
-  openAppSecret: b3ad29d0bd6d30f7cb40a52cfd0203d6
+  openAppId: wx4ad47f7609414a99
+  openAppSecret: b934c626c2129a3c5c8d16275c7f775a
   mchId:  gh_81ec7e6f9d0e
   mchKey: 06C56A89949D617xxxxxxxxxxx
   keyPath: /var/weixin_cert/h5.p12
@@ -39,6 +39,6 @@ wechat:
 #    orderStatus: e-Cqq67QxD6YNI41iRiqawEYdFavW_7pc7LyEMb-yeQ
 #
 url-config:
-  wechatMpAuthorize: http://5tvyjr.natappfree.cc
-  wechatOpenAuthorize: http://5tvyjr.natappfree.cc
-  sell: http://5tvyjr.natappfree.cc
+  wechatMpAuthorize: http://yd29ir.natappfree.cc
+  wechatOpenAuthorize: http://yd29ir.natappfree.cc
+  sell: http://yd29ir.natappfree.cc

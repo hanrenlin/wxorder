@@ -5,6 +5,7 @@ import com.haorenlin.wxorder.enums.ResultEnum;
 import com.haorenlin.wxorder.exception.SellException;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.api.WxConsts;
+import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.result.WxMpOAuth2AccessToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,9 @@ public class WechatController {
     private WxMpService wxMpService;
 
     @Autowired
+    private WxMpService wxOpenService;
+
+    @Autowired
     private UrlConfig urlConfig;
 
     @GetMapping("/authorize")
@@ -60,6 +64,30 @@ public class WechatController {
         String openId = wxMpOAuth2AccessToken.getOpenId();
         log.info("openId:{}", openId);
         log.info("returnUrl:{}", returnUrl);
+        return "redirect:" + returnUrl + "?openid=" + openId;
+    }
+
+    @GetMapping("/qrAuthorize")
+    public String qrAuthorize(@RequestParam("returnUrl") String returnUrl) {
+        String url = urlConfig.getWechatOpenAuthorize() + "/sell/wechat/qrUserInfo";
+        String redirectUrl = wxOpenService.buildQrConnectUrl(url, WxConsts.QrConnectScope.SNSAPI_LOGIN, URLEncoder.encode(returnUrl));
+        log.info("qrAuthorize come in ,redirectUrl={}",redirectUrl);
+        return "redirect:" + redirectUrl;
+    }
+
+    @GetMapping("/qrUserInfo")
+    public String qrUserInfo(@RequestParam("code") String code,
+                             @RequestParam("state") String returnUrl) {
+        WxMpOAuth2AccessToken wxMpOAuth2AccessToken = new WxMpOAuth2AccessToken();
+        try {
+            wxMpOAuth2AccessToken = wxOpenService.oauth2getAccessToken(code);
+        } catch (WxErrorException e) {
+            log.error("【微信网页授权】出错，{}", e);
+            throw new SellException(ResultEnum.WECHAT_MP_ERROR.getCode(), e.getError().getErrorMsg());
+        }
+        log.info("【微信网页授权】wxMpOAuth2AccessToken={}", wxMpOAuth2AccessToken);
+        String openId = wxMpOAuth2AccessToken.getOpenId();
+
         return "redirect:" + returnUrl + "?openid=" + openId;
     }
 
